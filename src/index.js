@@ -1,10 +1,15 @@
 const express = require('express');
 const cors = require('cors');
-
-const gfm_scraper = require('./gfm_scraper');
+require('./db/mongoose')
+const gfm_scraper = require('./scrapers/gfm_scraper');
+const tileRouter = require('./routers/tile')
+const Tile = require('./models/tile')
 
 const app = express();
+app.use(express.json())
 app.use(cors());
+app.use(tileRouter)
+
 
 app.get('/', (req, res) => {
   res.json({
@@ -17,6 +22,13 @@ app.get('/search/:query', (req, res) => {
     .searchFundraiser(req.params.query)
     .then(fundraisers => {
       res.json(fundraisers);
+      Tile.insertMany(fundraisers, (err, docs) => {
+        if (err) {
+          console.log(err)
+        } else {
+          console.log('data stored', docs.length);
+        }
+      });
     });
 });
 
