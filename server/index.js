@@ -1,16 +1,22 @@
 const express = require('express');
 const cors = require('cors');
+const graphqlHTTP = require('express-graphql');
+
 require('./db/mongoose')
 const gfm_scraper = require('./scrapers/gfm_scraper');
 const change_scraper = require('./scrapers/change_scraper');
 const tileRouter = require('./routers/tile')
 const Tile = require('./models/tile')
-
+const schema = require('./qlschema/schema')
 const app = express();
 app.use(express.json())
 app.use(cors());
 app.use(tileRouter)
 
+app.use('/graphql', graphqlHTTP({
+  schema,
+  graphiql: true
+}));
 
 app.get('/', (req, res) => {
   res.json({
