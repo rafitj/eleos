@@ -19,7 +19,11 @@ function searchFundraiser(searchTerm) {
         const $element = $(element);
         const $link = $element.find('.campaign-tile-img--contain').attr('href');
         const link = $link.split('/')[3]
+        const image = $element.find('.campaign-tile-img--contain').attr('data-original');
+        const title = $element.find('.fund-title').first().text();
         fundraiser = {
+            title,
+            image,
             link
         }
         fundraisers.push(fundraiser);
