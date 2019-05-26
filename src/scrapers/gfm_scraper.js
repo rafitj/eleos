@@ -1,14 +1,7 @@
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 
-const searchCache = {};
-const fundraiserCache = {};
-
 function searchFundraiser(searchTerm) {
-    if (searchCache[searchTerm]) {
-        console.log('Serving from cache:', searchTerm);
-        return Promise.resolve(searchCache[searchTerm]);
-    }
     const searchUrl = 'https://www.gofundme.com/mvc.php?route=homepage_norma/search&term=';
     return fetch(`${searchUrl}${searchTerm}`)
     .then(response => response.text())
@@ -24,20 +17,17 @@ function searchFundraiser(searchTerm) {
         fundraiser = {
             title,
             image,
-            link
+            link,
+            type: 'fundraiser',
+            origin: 'gfm'
         }
         fundraisers.push(fundraiser);
       });
-      searchCache[searchTerm] = fundraisers;
       return fundraisers
     });
 }
 
 function getFundraiser(link) {
-    if(fundraiserCache[link]) {
-        console.log('Serving from cache:', link);
-        return Promise.resolve(fundraiserCache[link]);
-    }
     const searchUrl = 'https://www.gofundme.com/';
     return fetch(`${searchUrl}${link}`)
     .then(response => response.text())
@@ -62,9 +52,10 @@ function getFundraiser(link) {
         numPeople,
         tag,
         image,
-        link
+        link,
+        type: 'fundraiser',
+        origin: 'gfm'
       };
-      fundraiserCache[link] = fundraiser;
       return fundraiser
     });
 }

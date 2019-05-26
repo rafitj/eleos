@@ -12,6 +12,14 @@ const Tile = mongoose.model('Tile', {
     link: {
         type: String,
         required: true
+    },
+    type:{
+        type: String,
+        required: true
+    },
+    origin: {
+        type: String,
+        required: true
     }
 })
 

@@ -13,29 +13,29 @@ router.get ('/tiles', async (req,res)=>{
         res.status(500).res.send()
     }
 })
-router.get ('/tiles/:id', async (req,res)=>{
-    try {
+router.get ('/tiles/:id',  (req,res)=>{
         redis.get(req.params.id, (err, reply)=>{
             if (err){
-                return console.log(err)
+                return res.send(err)
             }
             else if (reply){
                 console.log ("Returning ", reply, " from Redis cache")
                 return res.send(reply)
             }
+            else {
+                console.log ("Not found in")
+                Tile.find({ link: req.params.id }, (err,doc)=>{
+                    if (err || !doc){
+                        return res.status(400).send()
+                    }
+                    redis.set(req.params.id, JSON.stringify(doc), () => {
+                        console.log (JSON.stringify(doc), "cached in Redis")
+                        return res.send(doc);
+                    })
+                })
+            }
         })
-    }
-    catch {
-        const tile = await Tile.find({ link: req.params.id });
-        if (!tile){
-            return res.status(400).send()
-        }
-        redis.set(req.params.id, JSON.stringify(tile), () => {
-            console.log (JSON.stringify(tile), "cached in Redis")
-        })
-        return res.send(tile)
-    }
-})
+    })
 router.patch ('/tiles/:id', async (req,res)=>{
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name', 'email', 'age']

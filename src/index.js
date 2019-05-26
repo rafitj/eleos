@@ -1,9 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-
-
 require('./db/mongoose')
 const gfm_scraper = require('./scrapers/gfm_scraper');
+const change_scraper = require('./scrapers/change_scraper');
 const tileRouter = require('./routers/tile')
 const Tile = require('./models/tile')
 
@@ -20,10 +19,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/search/:query', (req, res) => {
+  const list = []
   gfm_scraper
     .searchFundraiser(req.params.query)
     .then(fundraisers => {
-      res.json(fundraisers);
+      list.push(fundraisers)
       Tile.insertMany(fundraisers, (err, docs) => {
         if (err) {
           console.log(err)
@@ -32,6 +32,20 @@ app.get('/search/:query', (req, res) => {
         }
       });
     });
+    change_scraper
+    .searchChangePetition(req.params.query)
+    .then(petitions => {
+      list.push(petitions)
+      Tile.insertMany(petitions, (err, docs) => {
+        if (err) {
+          console.log(err)
+        } else {
+          console.log('data stored', docs.length);
+        }
+      });
+      return res.json(list);
+    });
+
 });
 
 app.get('/fundraiser/:link', (req, res) => {
