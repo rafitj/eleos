@@ -1,0 +1,24 @@
+*:focus {
+    outline: 0 !important;
+}
+.home_container{
+    margin: 5rem 12rem;
+    text-align: center;
+}
+.home_search {
+    border: none;
+    box-shadow: 0 0 5px #d0d0d0;
+    padding: 1rem;
+    width: 45%;
+    border-radius: 25px;
+    transition: all 0.25s ease;
+}
+.home_search:focus {
+    border: sold 1px #d0d0d0 ;
+    box-shadow: 0 0 5px #bdbdbd;
+    width: 50%;
+}
+.home_logo{
+    width: 5rem;
+    margin: 2rem;
+}

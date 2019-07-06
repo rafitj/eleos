@@ -1,26 +1,26 @@
 const mongoose = require('mongoose')
 
 const Tile = mongoose.model('Tile', {
-    title: {
+    id: {
+        type: Number,
+        required: true
+    },
+    type: {
         type: String,
         required: true
     },
-    image: {
-        type: String,
+    trending: {
+        type: Number,
         required: true
     },
-    link: {
-        type: String,
+    hearts: {
+        type: Number,
         required: true
     },
-    type:{
-        type: String,
-        required: true
-    },
-    origin: {
+    hlpId: {
         type: String,
         required: true
     }
 })
 
-module.exports  = Tile
+module.exports = Tile
