@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 const _ = require('lodash');
-const charity = require('../models/charity');
+const Charity = require('../models/charity');
 const tile = require('../models/tile');
 
 const {
@@ -25,7 +25,7 @@ const CharityType = new GraphQLObjectType({
         link: { type: GraphQLString },
         type: { type: GraphQLString },
         date: { type: GraphQLString },
-        ppl: { type: GraphQLInt }
+        // ppl: { type: GraphQLInt }
     })
 });
 const TileType = new GraphQLObjectType({
@@ -38,7 +38,7 @@ const TileType = new GraphQLObjectType({
         charityId: {
             type: CharityType,
             resolve(parent, args) {
-                return charity.findById(parent.id)
+                return Charity.findById(parent.id)
             }
         }
     })
@@ -50,22 +50,20 @@ const RootQuery = new GraphQLObjectType({
             type: CharityType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                return hlp.findById(args.id)
+                return Charity.findById(args.id)
             }
         },
         charities: {
             type: new GraphQLList(CharityType),
             resolve(parent, args) {
-                //code to get data from db
-                return charity
+                return Charity.find({})
             }
         },
         tile: {
             type: TileType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                //code to get data from db
-                return _.find(tiles, { id: args.id })
+                // return (tiles, { id: args.id })
             }
         },
         tiles: {

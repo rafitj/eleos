@@ -1,46 +1,61 @@
 const mongoose = require('mongoose')
+const mongoolia = require('mongoolia').default;
+require('dotenv').config();
 
-const Charity = mongoose.model('Charity', {
-    id: {
-        type: Number,
-        required: true
-    },
+const charitySchema = new mongoose.Schema( {
     description: {
         type: String,
-        required: true
+        required: true,
+        algoliaIndex: true 
     },
     title: {
         type: String,
-        required: true
+        required: true,
+        algoliaIndex: true 
     },
     creator: {
         type: String,
-        required: true
+        required: true,
+        algoliaIndex: true 
     },
     link: {
         type: String,
-        required: true
+        required: true,
+        algoliaIndex: true 
     },
     ppl: {
         type: Number,
-        required: false
+        required: false,
+        algoliaIndex: true 
     },
     date: {
         type: String,
-        required: false
+        required: false,
+        algoliaIndex: true 
     },
     image: {
         type: String,
-        required: true
+        required: false,
+        algoliaIndex: true 
     },
     origin: {
         type: String,
-        required: true
+        required: true,
+        algoliaIndex: true 
     },
     type: {
         type: String,
-        required: true
+        required: true,
+        algoliaIndex: true 
     }
 })
+
+const Charity = mongoose.model('Charity', charitySchema)
+
+charitySchema.plugin(mongoolia, {
+    appId: process.env.ALG_APP_ID,
+    apiKey: process.env.ALG_API_KEY,
+    indexName: 'charity'
+  })
 
 module.exports = Charity

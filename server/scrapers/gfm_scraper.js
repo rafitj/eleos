@@ -47,10 +47,10 @@ function getFundraiser(link) {
       const fundraiser = {
         link,
         title,
+        image,
         description,
         date,
-        creator,
-        ppl,
+        creator : 'Rafit',
         image,
         type: 'fundraiser',
         origin: 'gfm'

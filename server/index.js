@@ -1,14 +1,16 @@
 const express = require('express');
 const cors = require('cors');
 const graphqlHTTP = require('express-graphql');
-
-require('./db/mongoose')
-const gfm_scraper = require('./scrapers/gfm_scraper');
-const change_scraper = require('./scrapers/change_scraper');
 const tileRouter = require('./routers/tile')
-const Charity = require('./models/charity')
 const schema = require('./qlschema/schema')
 const app = express();
+const collect = require('./main/collect');
+const alg = require('./main/search');
+
+require('dotenv').config();
+
+require('./db/mongoose')
+
 app.use(express.json())
 app.use(cors());
 app.use(tileRouter)
@@ -20,40 +22,13 @@ app.use('/graphql', graphqlHTTP({
 
 app.get('/', (req, res) => {
   res.json({
-    message: 'Scraping is Fun!'
+    message: 'Home'
   });
 });
 
 app.get('/search/:query', (req, res) => {
-  const list = []
-  gfm_scraper
-    .searchFundraiser(req.params.query)
-    .then((fundraisers) => {
-      console.log(fundraisers)
-      list.push(fundraisers)
-      // Charity.insertMany(fundraisers, (err, docs) => {
-      //   if (err) {
-      //     console.log(err)
-      //   } else {
-      //     console.log('data stored', docs.length);
-      //   }
-      // });
-    })
-    .catch((err) => console.log(err))
-  change_scraper
-  .searchChangePetition(req.params.query)
-  .then((petitions) => {
-    list.push(petitions)
-    // Charity.insertMany(petitions, (err, docs) => {
-    //   if (err) {
-    //     console.log(err)
-    //   } else {
-    //     console.log('data stored', docs.length);
-    //   }
-    // });
-    return res.json(list);
-  })
-  .catch((err) => console.log(err))
+  collect.collectAll(req.params.query)
+  alg.algoliaPush()
 });
 
 app.get('/fundraiser/:link', (req, res) => {
@@ -64,7 +39,7 @@ app.get('/fundraiser/:link', (req, res) => {
     });
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 2000;
 app.listen(port, () => {
   console.log(`Listening on ${port}`);
 });

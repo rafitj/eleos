@@ -44,7 +44,7 @@ function getChangePetition(link) {
       const petition = {
         title,
         description,
-        creator,
+        creator : 'Rafit',
         image,
         link,
         type: 'petition',
