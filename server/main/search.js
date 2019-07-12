@@ -1,15 +1,28 @@
 const algoliasearch = require('algoliasearch')
-const client = algoliasearch(process.env.ALG_APP_ID,process.env.ALG_API_KEY)
-const index = client.initIndex('charaties')
+const client = algoliasearch('20WYW758LC','10ffb5700e25692e3487b91f63aef839')
+const index = client.initIndex('charity')
 const Charity = require('../models/charity');
-
 function algoliaPush(){
-    const objects = Charity.find({})
-    console.log(objects)
-    index.addObjects([objects], (err, content) => {
-    console.log(err);
+    Charity.find({}, function(err, charities) {
+        const list = []
+        charities.forEach(function(charity) {
+            list.push(charity)
+        });
+        console.log(list.length)
+        index.addObjects(list, (err, content) => {
+            console.log(err);
+        });
+        return list
     });
 }
+
+// async function algoliaPush(){
+//     const objects = await getObjects()
+//     console.log(objects)
+//     index.addObjects([objects], (err, content) => {
+//     console.log(err);
+//     });
+// }
 
 
 module.exports = {

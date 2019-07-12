@@ -28,7 +28,7 @@ function collectAll(query){
           console.log('data stored', docs.length);
         }
       });
-      return res.json(list);
+      return list;
     })
     .catch((err) => console.log(err))
 }

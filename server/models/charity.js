@@ -5,22 +5,22 @@ require('dotenv').config();
 const charitySchema = new mongoose.Schema( {
     description: {
         type: String,
-        required: true,
+        required: false,
         algoliaIndex: true 
     },
     title: {
         type: String,
-        required: true,
+        required: false,
         algoliaIndex: true 
     },
     creator: {
         type: String,
-        required: true,
+        required: false,
         algoliaIndex: true 
     },
     link: {
         type: String,
-        required: true,
+        required: false,
         algoliaIndex: true 
     },
     ppl: {
@@ -40,12 +40,12 @@ const charitySchema = new mongoose.Schema( {
     },
     origin: {
         type: String,
-        required: true,
+        required: false,
         algoliaIndex: true 
     },
     type: {
         type: String,
-        required: true,
+        required: false,
         algoliaIndex: true 
     }
 })

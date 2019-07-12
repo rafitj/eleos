@@ -27,8 +27,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/search/:query', (req, res) => {
-  collect.collectAll(req.params.query)
   alg.algoliaPush()
+  // return res.json(collect.collectAll(req.params.query))
 });
 
 app.get('/fundraiser/:link', (req, res) => {
